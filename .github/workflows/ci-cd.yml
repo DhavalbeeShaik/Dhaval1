@@ -15,15 +15,16 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set up Java
-      uses: Echo "java"
+      run : Echo "java"
 
     - name: Build with Maven
       run: Echo "Maven Build completed"
+      
     - name: SonarQube Scan
-      uses: Echo "SonarSource"
-
+      run: Echo "SonarSource"
+      
     - name: Snyk Scan
-      uses: Echo "snyk"
+      run: Echo "snyk"
      
 
     - name: Upload to Artifactory
