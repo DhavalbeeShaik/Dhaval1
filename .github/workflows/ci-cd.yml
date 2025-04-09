@@ -26,58 +26,32 @@ jobs:
     - name: Snyk Scan
       run: echo "snyk"
      
-
     - name: Upload to Artifactory
       run: echo "mvn deploy"
-      
 
     - name: Deployement to EKS Cluster(Via AgroCD)
       run: echo "Deployement to EKS"
- qa_deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to QA
-        run: echo " Deploy to QA"
+ 
+    - name: Deploy to QA
+      run: echo " Deploy to QA"
 
-      - name: Run QA Test Suite
-        run: echo "QA test"
+    - name: Run QA Test Suite
+      run: echo "QA test"
 
-  dast_scan:
-    needs: qa_deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: DAST scan via Rapid7
-        run: echo "Dast Scan"
-  stg_deploy:
-    needs: dast_scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to STG
-        run: echo " Deploy to STG"
+    - name: DAST scan via Rapid7
+      run: echo "Dast Scan"
+  
+    - name: Deploy to STG
+      run: echo " Deploy to STG"
 
-      - name: Automated UAT
-        run: echo " Automated UAT"
+    - name: Automated UAT
+      run: echo " Automated UAT"
 
-  tag_release:
-    needs: stg_deploy
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Tag PRD Release
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git tag prd-v1.0.${{ github.run_number }}
-          git push origin --tags
+    - name: Tag PRD Release
+      run: echo "PRD Release"
 
-  prd_deploy:
-    needs: tag_release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to Production
-        run: echo " Deploy to Production"
+    - name: Deploy to Production
+      run: echo " Deploy to Production"
 
-      - name: Post-PRD Smoke Test
-        run: echo " Post -PRD smoke test"
-        
+    - name: Post-PRD Smoke Test
+      run: echo " Post -PRD smoke test"
