@@ -26,11 +26,32 @@ jobs:
     - name: Snyk Scan
       run: echo "snyk"
      
-
     - name: Upload to Artifactory
       run: echo "mvn deploy"
-      
 
     - name: Deployement to EKS Cluster(Via AgroCD)
       run: echo "Deployement to EKS"
-        
+ 
+    - name: Deploy to QA
+      run: echo " Deploy to QA"
+
+    - name: Run QA Test Suite
+      run: echo "QA test"
+
+    - name: DAST scan via Rapid7
+      run: echo "Dast Scan"
+  
+    - name: Deploy to STG
+      run: echo " Deploy to STG"
+
+    - name: Automated UAT
+      run: echo " Automated UAT"
+
+    - name: Tag PRD Release
+      run: echo "PRD Release"
+
+    - name: Deploy to Production
+      run: echo " Deploy to Production"
+
+    - name: Post-PRD Smoke Test
+      run: echo " Post -PRD smoke test"
