@@ -46,7 +46,10 @@ jobs:
 
     - name: Automated UAT
       run: echo " Automated UAT"
-
+      
+    - name: Await Manual Merge Approval
+      run: echo "Waiting for approval to tag production..."
+        
     - name: Tag PRD Release
       run: echo "PRD Release"
 
