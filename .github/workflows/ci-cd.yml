@@ -15,22 +15,22 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set up Java
-      run : Echo "java"
+      run : echo "java"
 
     - name: Build with Maven
-      run: Echo "Maven Build completed"
+      run: echo "Maven Build completed"
       
     - name: SonarQube Scan
-      run: Echo "SonarSource"
+      run: echo "SonarSource"
       
     - name: Snyk Scan
-      run: Echo "snyk"
+      run: echo "snyk"
      
 
     - name: Upload to Artifactory
-      run: Echo "mvn deploy"
+      run: echo "mvn deploy"
       
 
     - name: Deployement to EKS Cluster(Via AgroCD)
-      run: Echo "Deployement to EKS"
+      run: echo "Deployement to EKS"
         
