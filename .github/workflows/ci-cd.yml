@@ -2,9 +2,17 @@ name: CI-CD-Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - develop
+      - qa
+      - 'feature/*'
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+      - develop
+      - qa
+      - 'feature/*'
 
 jobs:
   build:
@@ -15,46 +23,60 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set up Java
-      run : echo "java"
+      run: echo "java"
 
     - name: Build with Maven
       run: echo "Maven Build completed"
       
     - name: SonarQube Scan
       run: echo "SonarSource"
-      
+
     - name: Snyk Scan
       run: echo "snyk"
-     
+
     - name: Upload to Artifactory
       run: echo "mvn deploy"
 
-    - name: Deployement to EKS Cluster(Via AgroCD)
-      run: echo "Deployement to EKS"
- 
-    - name: Deploy to QA
-      run: echo " Deploy to QA"
-
-    - name: Run QA Test Suite
-      run: echo "QA test"
-
     - name: DAST scan via Rapid7
       run: echo "Dast Scan"
-  
+
+    - name: Run QA Test Suite
+      if: github.event_name == 'pull_request' && github.base_ref == 'qa'
+      run: echo "QA test"
+
+    - name: Deploy to QA
+      if: github.ref == 'refs/heads/qa'
+      run: echo "Deploy to QA"
+
     - name: Deploy to STG
-      run: echo " Deploy to STG"
+      if: github.ref == 'refs/heads/qa' && github.event_name == 'push'
+      run: echo "Deploy to STG"
 
     - name: Automated UAT
-      run: echo " Automated UAT"
-      
+      if: github.ref == 'refs/heads/qa' && github.event_name == 'push'
+      run: echo "Automated UAT"
+
+    - name: Deploy to Develop Environment
+      if: (github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature/')) && github.event_name == 'push'
+      run: echo "Deploying to develop environment"
+
     - name: Await Manual Merge Approval
-      run: echo "Waiting for approval to tag production..."
-        
+      if: github.ref == 'refs/heads/main'
+      run: echo "Approval granted. Proceeding with production release."
+
+
     - name: Tag PRD Release
+      if: github.ref == 'refs/heads/main'
       run: echo "PRD Release"
 
     - name: Deploy to Production
-      run: echo " Deploy to Production"
+      if: github.ref == 'refs/heads/main'
+      run: echo "Deploy to Production"
 
     - name: Post-PRD Smoke Test
-      run: echo " Post -PRD smoke test"
+      if: github.ref == 'refs/heads/main'
+      run: echo "Post-PRD smoke test"
+
+    - name: Deployment to EKS Cluster (via ArgoCD)
+      if: github.ref == 'refs/heads/main'
+      run: echo "Deployment to EKS"
